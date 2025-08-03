@@ -73,3 +73,7 @@ typings/
 
 app/.next/
 app/bin/
+app/out/
+app/tsconfig.tsbuildinfo
+app/yarn.lock
+app/package-lock.json
