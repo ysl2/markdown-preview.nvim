@@ -81,6 +81,7 @@ const createStandalonePlugin = (markdownFilePath) => {
     nvim,
     init: () => {},
     isStandalone: true,
+    standaloneFile: markdownFilePath,
   };
 
   return plugin;

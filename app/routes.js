@@ -64,11 +64,13 @@ use(async (req, res, next) => {
     const plugin = req.plugin
     const buffers = await plugin.nvim.buffers
     const buffer = buffers.find(b => b.id === Number(req.bufnr))
-    if (buffer) {
-      let fileDir = ''
-      if (req.custImgPath !== '' ){
+    if (buffer || plugin.standaloneFile) {
+      let fileDir
+      if (req.custImgPath) {
         fileDir = req.custImgPath
-      } else {
+      } else if (plugin.isStandalone) {
+        fileDir = path.dirname(plugin.standaloneFile)
+      } else if (req.bufnr) {
         fileDir = await plugin.nvim.call('expand', `#${req.bufnr}:p:h`)
       }
 
@@ -93,7 +95,7 @@ use(async (req, res, next) => {
 
       let imgPath = decodeURIComponent(decodeURIComponent(req.asPath.replace(reg, '')))
       imgPath = imgPath.replace(/\\ /g, ' ')
-      if (imgPath[0] !== '/' && imgPath[0] !== '\\') {
+      if (imgPath[0] !== '/' && imgPath[0] !== '\\' && fileDir) {
         imgPath = path.join(fileDir, imgPath)
       } else if (!fs.existsSync(imgPath)) {
         let tmpDirPath = fileDir

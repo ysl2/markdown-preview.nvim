@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 
+# Save original working directory
+ORIG_PWD="$PWD"
+
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Construct the path to the app directory
 APP_DIR="$SCRIPT_DIR/../app"
 
-# Change to the app directory and run the cli.js with node, passing all arguments
-cd "$APP_DIR" && node ./cli.js "$@"
+# Process arguments to convert relative paths to absolute
+processed_args=()
+for arg in "$@"; do
+  if [[ "$arg" != /* ]]; then
+    # It's a relative path; convert to absolute using original working directory
+    arg="$ORIG_PWD/$arg"
+  fi
+  processed_args+=("$arg")
+done
+
+# Change to the app directory and run the cli.js with node, passing processed arguments
+cd "$APP_DIR" && node ./cli.js "${processed_args[@]}"
