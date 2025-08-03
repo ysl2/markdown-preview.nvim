@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Get the directory of the script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Construct the path to the app directory
+APP_DIR="$SCRIPT_DIR/../app"
+
+# Change to the app directory and run the cli.js with node, passing all arguments
+cd "$APP_DIR" && node ./cli.js "$@"

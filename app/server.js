@@ -1,6 +1,6 @@
-exports.run = function () {
+exports.run = function (plugin) {
   // attach nvim
-  const { plugin } = require('./nvim')
+  // const { plugin } = require('./nvim')
   const http = require('http')
   const websocket = require('socket.io')
 
@@ -178,6 +178,13 @@ exports.run = function () {
       })
 
       plugin.nvim.call('mkdp#util#open_browser')
+
+      if (plugin.isStandalone) {
+        const openHost = 'localhost';
+        const url = `http://${openHost}:${port}/page/1`;
+        console.log(`Preview available at: ${url}`);
+        openUrl(url);
+      }
     })
   }
 

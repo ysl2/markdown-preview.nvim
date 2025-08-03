@@ -1,8 +1,12 @@
-// change cwd to ./app
-if (!/^(\/|C:\\)snapshot/.test(__dirname)) {
-  process.chdir(__dirname)
+if (process.mainModule.filename.endsWith('app/cli.js')) {
+  // running in standalone mode
 } else {
-  process.chdir(process.execPath.replace(/(markdown-preview.nvim.*?app).+?$/, '$1'))
-}
+  // change cwd to ./app
+  if (!/^(\/|C:\\)snapshot/.test(__dirname)) {
+    process.chdir(__dirname)
+  } else {
+    process.chdir(process.execPath.replace(/(markdown-preview.nvim.*?app).+?$/, '$1'))
+  }
 
-require('./lib/app')
+  require('./lib/app')
+}
